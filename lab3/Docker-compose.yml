@@ -1,0 +1,12 @@
+# sudo docker run -d --name  my-app mynginx:1.0
+version: '3'
+services:
+  react-app:
+    container_name: my-app
+    image: mynginx:1.0
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    ports:
+      -'8080:80'
+    

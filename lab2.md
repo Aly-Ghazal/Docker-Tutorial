@@ -24,11 +24,11 @@ then
   ```
         FROM node:16-alpine 
         WORKDIR /app
-        RUN npm ci 
-        RUN npm run build
-        ENV NODE_ENV production
+        copy package*.json ./
+        RUN npm install 
+        copy . .
         EXPOSE 3000
-        CMD [ "npx", "serve", "build" ]
+        CMD [ "npm", "start" ]
   ```
 
 - Multi stage
@@ -36,13 +36,13 @@ then
   ```
      FROM node:16-alpine as builder
      WORKDIR /app
-     RUN npm ci 
+     copy package*.json ./
+     RUN npm install 
+     copy . . 
      RUN npm run build
 
-     FROM nginx:1.21.0-alpine as production
-     ENV NODE_ENV production
+     FROM nginx:1.21.0-alpine
      COPY --from=builder /app/build /usr/share/nginx/html
-     COPY nginx.conf /etc/nginx/conf.d/default.conf
      EXPOSE 80
      CMD ["nginx", "-g", "daemon off;"]
   ```
